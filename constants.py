@@ -1,0 +1,3 @@
+RESUME_EMBEDDING_DIRECTORY = "cache/embeddings"
+TEMP_DIRECTORY = "cache/tmp"
+DESIRED_NUM_POSTINGS = 20
