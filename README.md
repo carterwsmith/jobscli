@@ -3,6 +3,7 @@
 (no SerpAPI dependency because I'm built different)
 
 ## First-time usage
+- Install requirements with `pip install -r requirements.txt`.
 - Create a `.env` file with an `OPENAI_API_KEY`.
 - Run `python driver.py -r RESUME_PATH` to embed and store your resume.
 
