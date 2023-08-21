@@ -126,7 +126,7 @@ if __name__ == '__main__':
         relevant_jobs_in_db = retrieve_relevant_jobs_from_db(query=jobsearch_query)
         all_relevant_jobs = relevant_jobs_in_db
     else:
-        relevant_db_jobs = retrieve_relevant_jobs_from_db(query=jobsearch_query)
+        relevant_jobs_in_db = retrieve_relevant_jobs_from_db(query=jobsearch_query)
         found_jobs = _retrieve_jobs_from_query(query=jobsearch_query, location=location_input)
         newly_stored_jobs = store_jobs(job_list=found_jobs)
         all_relevant_jobs = newly_stored_jobs + relevant_jobs_in_db
