@@ -110,9 +110,12 @@ def _retrieve_jobs_from_query(query, location=None):
     jobs = get_jobs_manual(query=query, location=location, n=DESIRED_NUM_POSTINGS)
     return jobs
 
-def _print_result(jobs_iterable, session_cost=None):
+def _print_result(jobs_iterable, session_cost=None, include_links=False):
     for job in jobs_iterable:
         print(f"{job.relevance_score}: {job.title} at {job.company} in {job.location if job.location else 'N/A'}")
+        if include_links:
+            print(f"{job.app_link}")
+        print()
 
     if session_cost:
         # print session cost formatted in dollars and cents
@@ -150,4 +153,4 @@ if __name__ == '__main__':
 
         all_relevant_jobs = newly_stored_jobs + relevant_jobs_in_db
 
-    _print_result(jobs_iterable=all_relevant_jobs, session_cost=session_cost)
+    _print_result(jobs_iterable=all_relevant_jobs, session_cost=session_cost, include_links=True)
