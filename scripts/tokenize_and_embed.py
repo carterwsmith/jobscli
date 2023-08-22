@@ -82,8 +82,8 @@ def embed_resume(filepath):
         # remove the last 1/4 of text
         text = text[:floor(len(text) * 3 / 4)]
         n_tokens = len(encoding.encode(text))
+    resume_embed_cost = _cost_from_num_tokens(n_tokens)
     
-    print(n_tokens, _cost_from_num_tokens(n_tokens))
     embedding = get_embedding(text, engine=embedding_model)
 
-    return embedding
+    return embedding, resume_embed_cost

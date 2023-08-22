@@ -97,11 +97,14 @@ def _embed_resume_from_path(path):
         extracted_text = extract_resume_text(filename=resume_path)
         _write_text_to_file(extracted_text, tmp_filepath)  
 
-        embedded_resume = embed_resume(filepath=tmp_filepath)
+        embedded_resume, embed_action_cost = embed_resume(filepath=tmp_filepath)
         _remove_file(tmp_filepath)
         _write_embedding_to_file(embedded_resume, destination_path=f"{RESUME_EMBEDDING_DIRECTORY}/{_get_filename_from_path(resume_path)}.json")
+
+        return embed_action_cost
     else:
         print(f"cached embedding found for filename: {filename}")
+        return 0.0
 
 def _retrieve_jobs_from_query(query, location=None):
     jobs = get_jobs_manual(query=query, location=location, n=DESIRED_NUM_POSTINGS)
@@ -123,6 +126,10 @@ if __name__ == '__main__':
     location_input = input("Location (wip): ")
 
     session_cost = 0.0
+
+    if not args.cached:
+        embed_action_cost = _embed_resume_from_path(path=args.resume)
+        session_cost += embed_action_cost
 
     if args.search:
         found_jobs = _retrieve_jobs_from_query(query=jobsearch_query, location=location_input)
