@@ -15,7 +15,7 @@ def _load_most_recent_json_file(directory):
     # get the most recent file
     most_recent_file = max(files, key=os.path.getctime)
     # print the filename of the most recent file
-    print(f"{most_recent_file}")
+    print(f"Using resume: {most_recent_file}")
     # load the most recent file
     with open(f"{most_recent_file}", 'r') as f:
         most_recent_json = json.load(f)

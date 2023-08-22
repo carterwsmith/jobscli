@@ -41,17 +41,20 @@ def store_jobs(job_list):
     """Stores a list of jobs in the database"""
     resume_embedding = _load_most_recent_json_file('cache/embeddings')
     stored_list = []
+    stored_cost = 0.0
     with db_session:
         for job in job_list:
             # create a job to store in the db unless it already exists
             if not _does_job_exist(job):
-                embedding = embed_job_from_dict(job)
+                embedding, single_job_cost = embed_job_from_dict(job)
+                stored_cost += single_job_cost
+                
                 embedding_str = json.dumps(embedding)
                 score = score_job_from_embedding(job_embedding=embedding, resume_embedding=resume_embedding)
 
                 new_stored_job = Job(title=job['title'], company=job["company"], location=job["location"], app_link=job["app_link"], app_text=job["app_text"], info=job["info"], embedding_json=embedding_str, relevance_score=score)
                 stored_list.append(new_stored_job)
-    return stored_list
+    return stored_list, stored_cost
 
 def _count_all_jobs():
     """Returns the number of jobs in the database"""

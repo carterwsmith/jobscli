@@ -66,8 +66,8 @@ def embed_jobs_from_dict(job_dict):
     return df
 
 def _cost_from_num_tokens(n):
-    # $0.0001 per token formatted as dollars and cents
-    return f"${n * 0.0001:.2f}"
+    # $0.0001 per 1000 tokens
+    return n / 1000 * 0.0001
 
 def embed_resume(filepath):
     # get the filename (remove rest of path, remove extension)

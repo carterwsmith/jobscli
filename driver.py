@@ -107,9 +107,13 @@ def _retrieve_jobs_from_query(query, location=None):
     jobs = get_jobs_manual(query=query, location=location, n=DESIRED_NUM_POSTINGS)
     return jobs
 
-def _print_result(jobs_iterable):
+def _print_result(jobs_iterable, session_cost=None):
     for job in jobs_iterable:
         print(f"{job.relevance_score}: {job.title} at {job.company} in {job.location if job.location else 'N/A'}")
+
+    if session_cost:
+        # print session cost formatted in dollars and cents
+        print(f"Session cost: ${session_cost:.2f}")
 
 if __name__ == '__main__':
     args = _validate_args()
@@ -118,9 +122,14 @@ if __name__ == '__main__':
     jobsearch_query = input("Find these jobs for me: ")
     location_input = input("Location (wip): ")
 
+    session_cost = 0.0
+
     if args.search:
         found_jobs = _retrieve_jobs_from_query(query=jobsearch_query, location=location_input)
-        newly_stored_jobs = store_jobs(job_list=found_jobs)
+
+        newly_stored_jobs, store_action_cost = store_jobs(job_list=found_jobs)
+        session_cost += store_action_cost
+
         all_relevant_jobs = newly_stored_jobs
     elif args.query:
         relevant_jobs_in_db = retrieve_relevant_jobs_from_db(query=jobsearch_query)
@@ -128,7 +137,10 @@ if __name__ == '__main__':
     else:
         relevant_jobs_in_db = retrieve_relevant_jobs_from_db(query=jobsearch_query)
         found_jobs = _retrieve_jobs_from_query(query=jobsearch_query, location=location_input)
-        newly_stored_jobs = store_jobs(job_list=found_jobs)
+
+        newly_stored_jobs, store_action_cost = store_jobs(job_list=found_jobs)
+        session_cost += store_action_cost
+
         all_relevant_jobs = newly_stored_jobs + relevant_jobs_in_db
 
-    _print_result(jobs_iterable=all_relevant_jobs)
+    _print_result(jobs_iterable=all_relevant_jobs, session_cost=session_cost)
