@@ -111,6 +111,8 @@ def retrieve_relevant_jobs_from_db(query):
             jobs += select(j for j in Job if n_gram.lower() in j.title.lower() or n_gram.lower() in j.info.lower())
     # filter jobs to have relevance score geq to 77
     jobs = [j for j in jobs if j.relevance_score >= 77]
+    # remove duplicate jobs
+    jobs = list(set(jobs))
     return sorted(jobs, key=lambda j: j.relevance_score, reverse=True)
 
 def freshen_jobs():
